@@ -13,7 +13,7 @@ public class Example6 {
         String line;
         System.out.println("Type any sentence here");
         line = sc.nextLine();
-        line=line.replaceAll("\\s+", " ").trim(); //removed spaces
+        //line=line.replaceAll("\\s+", " ").trim(); //removed spaces
         char[] charArr = line.toCharArray();
         boolean space = true;
         for (int i = 0; i < charArr.length; i++) {
