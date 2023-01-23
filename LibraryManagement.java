@@ -141,7 +141,7 @@ interface memberRegistration {
             }
             System.out.println("press any key to exit registration");
             c= sc.next();
-        }while(Objects.equals(c, "yes"));
+        }while(Objects.equals(c, "yes"));//while(c.equals("yes"));
     }
 }
 
