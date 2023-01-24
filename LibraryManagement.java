@@ -2,9 +2,9 @@ package library;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-class checkAvailability {
+interface checkAvailability {
     ArrayList<String> books = new ArrayList<>();
-     public ArrayList<String> displayBooks(String b) {
+     default ArrayList<String> displayBooks(String b) {
         //ArrayList<String> books=new ArrayList<>();
         books.add("b1");
         books.add("b2");
@@ -15,7 +15,7 @@ class checkAvailability {
         }
         return books;
     }
-    void displayMenu(){
+    default void displayMenu(){
         System.out.println("press 0 to Exit");
         System.out.println("press 1 to checkAvailability");
         System.out.println("press 2 to get book");
@@ -24,36 +24,24 @@ class checkAvailability {
         System.out.println("Press 5 to Register");
     }
 }
-class toTakeBook implements memberRegistration{
+class toTakeBook implements checkAvailability {
     String Name;
     int id;
-    String bookName;
-    checkAvailability btt=new checkAvailability();
     Scanner sc = new Scanner(System.in);
     public void getName() {
-        System.out.println("Register your name and id :");
-        memberRegistration mR=new toTakeBook();
-        mR.register();
-        System.out.println("Enter Your registered Name and Id :");
+        System.out.println("Enter your name");
         Name = sc.next();
     }
-    public void getId() {
+    public void getId() throws ParseException {
+        memberRegistration mR = new memberRegistration();
+        mR.getName();
+        int rid = mR.getId();
+        System.out.println("Enter your Id");
         id = sc.nextInt();
-    }
-    public void getBookName() {
-        bookName = sc.next();
-        ArrayList<String> tb = btt.displayBooks(bookName);
-        if (tb.contains(bookName)) {
-            tb.remove(bookName);
-            System.out.println(bookName + " is available you can take");
-            System.out.println("Book taken date :");
-            System.out.println("Books now available:");
-            for (String book : tb) {
-                System.out.println(book);
-            }
-        }else {
-            System.out.println("Not available");
-        }
+        if(id==rid){
+            getBooks gb=new getBooks();
+            gb.getBookName();
+        }else System.out.println("Id not found");
     }
     String getTheDate(){
         SimpleDateFormat sdt = new SimpleDateFormat("dd-MM-yyyy");
@@ -66,29 +54,47 @@ class toTakeBook implements memberRegistration{
         rDate= sdt.format(date.getTime());
         return rDate;
     }
+}
+class getBooks extends toTakeBook{
+    String bookName;
+    Scanner sc = new Scanner(System.in);
+    public void getBookName() {
+        System.out.println("Enter book name");
+        bookName = sc.next();
+        checkAvailability btt = new toTakeBook();
+        System.out.println("List of books in library");
+        ArrayList<String> tb = btt.displayBooks(bookName);
+        if (tb.contains(bookName)) {
+            tb.remove(bookName);
+            System.out.println(bookName + " is available you can take");
+            toTakeBook ttb=new toTakeBook();
+            ttb.getTheDate();
+        }else {
+            System.out.println("Not available");
+        }
     }
-class toReturnBook extends toTakeBook{
+
+}
+class toReturnBook extends getBooks {
     String Name;
     int id;
-    String bookName;
-    Scanner sc=new Scanner(System.in);
+    Scanner sc = new Scanner(System.in);
     public void getName() {
-        Name= sc.next();
+        System.out.println("Enter your name");
+        Name = sc.next();
     }
-    public void getId() {
-        id= sc.nextInt();
-    }
-    public void getBookName() {
-        bookName= sc.next();
-        ArrayList<String> rb= btt.displayBooks(bookName);
-        rb.add(bookName);
-        System.out.println("Books now available:");
-        for (String book : rb) {
-            System.out.println(book);
+    public void getId() throws ParseException {
+        memberRegistration mR = new memberRegistration();
+        int rid = mR.getId();
+        System.out.println("Enter your Id");
+        id = sc.nextInt();
+        if(id==rid) {
+        returnBooks rb=new returnBooks();
+        rb.getBookName();
         }
     }
     void returnTheDate() throws ParseException {
-        toTakeBook tkb=new toTakeBook();
+        getBooks tkb=new getBooks();
         String rdt=tkb.getTheDate();
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter the returning Date : ");
@@ -108,51 +114,55 @@ class toReturnBook extends toTakeBook{
             System.out.println("pay fine "+days*2+"Rs(2rs per day)");
         }
     }
+}
+class returnBooks {
+    String bookName;
+    Scanner sc = new Scanner(System.in);
+    public void getBookName() throws ParseException {
+        System.out.println("Enter book Name ");
+        bookName= sc.next();
+        checkAvailability btt = new toTakeBook();
+        System.out.println("Books in library");
+        ArrayList<String> rb= btt.displayBooks(bookName);
+        rb.add(bookName);
+        toReturnBook trb=new toReturnBook();
+        trb.returnTheDate();
+        System.out.println("Books now available:");
+        for (String book : rb) {
+            System.out.println(book);
+        }
+    }
     void returnDate(){
-        toTakeBook tkb=new toTakeBook();
+        getBooks tkb=new getBooks();
         String rdt=tkb.getTheDate();
         System.out.println("Return date : "+rdt);
     }
     }
-
-interface memberRegistration {
-
-    default void register(){
-        System.out.println("press Yes to continue registration");
-        String c;
-        ArrayList<Integer> rId = new ArrayList<>();
-        ArrayList<String> rName = new ArrayList<>();
-        rName.add("Pavi");
-        rId.add(124);
-        do {
-            Scanner sc = new Scanner(System.in);
-            //c=sc.next();
-            String name;
-            Integer id;
-            System.out.println("Enter name");
-            name = sc.next();
-            System.out.println("Enter id (ex:123)");
-            id = sc.nextInt();
-            System.out.println("Registered id's and name's ");
-            if (rId.contains(id)) {
-                System.out.println("Id Already registered try again..");
-            } else {
-                rId.add(id);
-                rName.add(name);
-                System.out.print(rId);
-                System.out.println(rName);
-            }
-            System.out.println("press any key to exit registration");
-            c= sc.next();
-        }while(Objects.equals(c, "yes"));//while(c.equals("yes"));
+class  memberRegistration {
+    String name;
+    int id;
+    long mobNum;
+    Scanner sc=new Scanner(System.in);
+    public void getMobNum() {
+        System.out.println("Enter your mobile number");
+        mobNum=sc.nextInt();
     }
-}
+    public void getName() {
+        System.out.println("Enter your name ");
+        name=sc.next();
+    }
+    public int getId() {
+        System.out.println("Enter your id ");
+        id=sc.nextInt();
+        return id;
+    }
 
-public class LibraryManagement implements memberRegistration {
+}
+public class LibraryManagement implements checkAvailability{
     public static void main(String[] args) throws ParseException {
+
         Scanner sc = new Scanner(System.in);
-        System.out.println("welcome");
-        checkAvailability b = new checkAvailability();
+        checkAvailability b = new LibraryManagement();
         int number;
         do {
             b.displayMenu();
@@ -163,34 +173,27 @@ public class LibraryManagement implements memberRegistration {
                     b.displayBooks("b");
                 }break;
                 case 2: {
-                    toTakeBook p = new toTakeBook();
-                    p.getName();
-                    p.getId();
-                    System.out.println("Book Name");
-                    p.getBookName();
-                    p.getTheDate();
+                    getBooks gb=new getBooks();
+                    gb.getName();
+                    gb.getId();
                 }
                 break;
                 case 3: {
-                    toReturnBook p1 = new toReturnBook();
-                    System.out.println("To return book enter your Name");
-                    p1.getName();
-                    System.out.println("Enter your Id");
-                    p1.getId();
-                    System.out.println("Book name");
-                    p1.getBookName();
-                    p1.returnTheDate();
-
+                   toReturnBook rb=new toReturnBook();
+                   rb.getId();
                 }break;
                 case 4: {
-                    toReturnBook p1 = new toReturnBook();
-                    p1.returnDate();
+                    returnBooks rb=new returnBooks();
+                    rb.returnDate();
                 }
                 break;
                 case 5:
                 {
-                    memberRegistration reg=new LibraryManagement() ;
-                    reg.register();
+                    memberRegistration reg=new memberRegistration() ;
+                    reg.getName();
+                    reg.getMobNum();
+                    reg.getId();
+                    System.out.println("Registered");
                 }break;
                 default:
                     System.out.println("Enter between 0 to 5");
