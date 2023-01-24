@@ -141,18 +141,18 @@ class returnBooks {
 class  memberRegistration {
     String name;
     int id;
-    long mobNum;
+    Long mobNum;
     Scanner sc=new Scanner(System.in);
     public void getMobNum() {
         System.out.println("Enter your mobile number");
-        mobNum=sc.nextInt();
+        mobNum=sc.nextLong();
     }
     public void getName() {
         System.out.println("Enter your name ");
         name=sc.next();
     }
     public int getId() {
-        System.out.println("Enter your id ");
+        System.out.println("Create your id ");
         id=sc.nextInt();
         return id;
     }
