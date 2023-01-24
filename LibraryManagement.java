@@ -24,18 +24,21 @@ class checkAvailability {
         System.out.println("Press 5 to Register");
     }
 }
-class toTakeBook extends checkAvailability{
+class toTakeBook implements memberRegistration{
     String Name;
-    Double mobNum;
+    int id;
     String bookName;
     checkAvailability btt=new checkAvailability();
     Scanner sc = new Scanner(System.in);
     public void getName() {
+        System.out.println("Register your name and id :");
+        memberRegistration mR=new toTakeBook();
+        mR.register();
+        System.out.println("Enter Your registered Name and Id :");
         Name = sc.next();
     }
-
-    public void getMobNum() {
-        mobNum = sc.nextDouble();
+    public void getId() {
+        id = sc.nextInt();
     }
     public void getBookName() {
         bookName = sc.next();
@@ -63,17 +66,17 @@ class toTakeBook extends checkAvailability{
         rDate= sdt.format(date.getTime());
         return rDate;
     }
-}
+    }
 class toReturnBook extends toTakeBook{
     String Name;
-    Double mobNum;
+    int id;
     String bookName;
     Scanner sc=new Scanner(System.in);
     public void getName() {
         Name= sc.next();
     }
-    public void getMobNum() {
-        mobNum= sc.nextDouble();
+    public void getId() {
+        id= sc.nextInt();
     }
     public void getBookName() {
         bookName= sc.next();
@@ -161,10 +164,8 @@ public class LibraryManagement implements memberRegistration {
                 }break;
                 case 2: {
                     toTakeBook p = new toTakeBook();
-                    System.out.println("To take book enter Your Name");
                     p.getName();
-                    System.out.println("Mobile number");
-                    p.getMobNum();
+                    p.getId();
                     System.out.println("Book Name");
                     p.getBookName();
                     p.getTheDate();
@@ -174,8 +175,8 @@ public class LibraryManagement implements memberRegistration {
                     toReturnBook p1 = new toReturnBook();
                     System.out.println("To return book enter your Name");
                     p1.getName();
-                    System.out.println("Mobile number");
-                    p1.getMobNum();
+                    System.out.println("Enter your Id");
+                    p1.getId();
                     System.out.println("Book name");
                     p1.getBookName();
                     p1.returnTheDate();
