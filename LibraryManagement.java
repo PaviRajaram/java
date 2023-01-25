@@ -199,7 +199,8 @@ public class LibraryManagement implements checkAvailability{
                     reg.getMobNum();
                     reg.getAddress();
                     Random rn=new Random();
-                    int id_s= rn.ints(3,200,300).sum();
+                    //int id_s= rn.ints(3,200,300).sum();
+                    int id_s=rn.nextInt(200);
                     System.out.print("Your id : ");
                     System.out.println(id_s);
                     reg.setId(id_s);
