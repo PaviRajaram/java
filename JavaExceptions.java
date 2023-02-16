@@ -7,6 +7,7 @@ class UserDefinedException {
     Scanner sc = new Scanner(System.in);
 
     void shopping() {
+        System.out.println("Shopping:");
         int amt;
         System.out.println("Enter Amount");
         amt = sc.nextInt();
@@ -23,6 +24,7 @@ class InputMismatchExceptions{
     Scanner sc=new Scanner(System.in);
     void add() throws InputMismatchException,ArithmeticException
     {
+        System.out.println("Addition ");
         int a,b,c;
         System.out.println("Enter values for a and b ");
         a=sc.nextInt();
